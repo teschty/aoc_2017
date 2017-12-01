@@ -11,6 +11,40 @@ fn read_file() -> String {
     contents
 }
 
+// convert ascii number to it's actual value
+fn to_number(byte: u8) -> i32 {
+    (byte as i32) - ('0' as i32)
+}
+
+fn part_one(bytes: &[u8]) -> i32 {
+    let mut sum = 0i32;
+    for i in 0..bytes.len() {
+        // eh, don't like this long conditional
+        if (i + 1 == bytes.len() && bytes[i] == bytes[0]) || bytes[i] == bytes[i + 1] {
+            sum += to_number(bytes[i]);
+        }
+    }
+
+    sum
+}
+
+fn part_two(bytes: &[u8]) -> i32 {
+    let mut sum = 0i32;
+
+    for i in 0..bytes.len() { 
+        let mut match_idx = i + bytes.len() / 2;
+        if match_idx >= bytes.len() {
+            match_idx -= bytes.len();
+        }
+
+        if bytes[i] == bytes[match_idx] {
+            sum += to_number(bytes[i]);
+        }
+    }
+
+    sum
+}
+
 fn main() {
     let puzzle = read_file();
     // trim to remove newline
@@ -19,18 +53,9 @@ fn main() {
     // since these are just all ASCII numbers (0-9)
     // we can just convert this to byte array
     let bytes = puzzle.as_bytes();
+    let part_one_solution = part_one(&bytes);
+    let part_two_solution = part_two(&bytes);
 
-    let mut sum = 0i32;
-    for i in 0..bytes.len() {
-        // eh, don't like this long conditional
-        if (i + 1 == bytes.len() && bytes[i] == bytes[0]) || bytes[i] == bytes[i + 1] {
-            let value = bytes[i] as i32;
-            // convert to actual value by subtracting ASCII value of '0'
-            let value = value - '0' as i32;
-
-            sum += value;
-        }
-    }
-
-    println!("Captcha solution is {}", sum);
+    println!("Part one solution is {}", part_one_solution);
+    println!("Part two solution is {}", part_two_solution);
 }
