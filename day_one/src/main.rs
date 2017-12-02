@@ -20,7 +20,11 @@ fn part_one(bytes: &[u8]) -> i32 {
     let mut sum = 0i32;
     for i in 0..bytes.len() {
         // eh, don't like this long conditional
-        if (i + 1 == bytes.len() && bytes[i] == bytes[0]) || bytes[i] == bytes[i + 1] {
+        if i + 1 == bytes.len() {
+            if bytes[i] == bytes[0] {
+                sum += to_number(bytes[i]);
+            } 
+        } else if bytes[i] == bytes[i + 1] {
             sum += to_number(bytes[i]);
         }
     }
