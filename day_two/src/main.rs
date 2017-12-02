@@ -42,13 +42,11 @@ fn part_two(input: &str) -> i32 {
 
         // there must be a more efficient solution than O(n^2)
         // but I can't think of it at the moment
-        // also can't just iterate over numbers, because borrow checker :(
-        let len = numbers.len();
-
-        'outer: for i in 0..len {
-            for j in 0..len {
-                if i != j && numbers[i] % numbers[j] == 0 {
-                    sum += numbers[i] / numbers[j];
+        'outer: 
+        for n in &numbers {
+            for m in &numbers {
+                if n != m && n % m == 0 {
+                    sum += n / m;
                     break 'outer;
                 }
             }
