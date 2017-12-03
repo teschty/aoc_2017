@@ -58,12 +58,6 @@ fn part_one(input: i32) -> i32 {
 }
 
 use std::collections::HashMap;
-// really dumb way to do this
-#[derive(PartialEq, Eq, Hash)]
-struct Point {
-    x: i32,
-    y: i32
-}
 
 fn part_two(input: i32) -> i32 {
     let (mut x, mut y) = (1i32, 0i32);
@@ -74,7 +68,7 @@ fn part_two(input: i32) -> i32 {
     let mut distance = 0;
     
     let mut values = HashMap::new();
-    values.insert(Point { x: 0, y: 0 }, 1);
+    values.insert((0, 0), 1);
 
     // fill with initial instructions
     while current_num <= input {
@@ -107,8 +101,7 @@ fn part_two(input: i32) -> i32 {
             for j in -1..2 {
                 if i == 0 && j == 0 { continue; }
 
-                let point = Point { x: x + i, y: y + j };
-                value += match values.get(&point) {
+                value += match values.get(&(x + i, y + j)) {
                     Some(val) => *val,
                     None => 0
                 }
@@ -116,7 +109,7 @@ fn part_two(input: i32) -> i32 {
         }
 
         current_num = value;
-        values.insert(Point { x, y }, current_num);
+        values.insert((x, y), current_num);
 
         match dir {
             Direction::Up => y += 1,
