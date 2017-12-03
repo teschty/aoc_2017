@@ -7,7 +7,6 @@ enum Direction {
     Right
 }
 
-
 fn part_one(input: i32) -> i32 {
     // won't work for 1, so hardcode result
     if input == 1 { return 0; }
@@ -37,8 +36,9 @@ fn part_one(input: i32) -> i32 {
                 },
                 Direction::Right => {
                     dir = Direction::Up;
+                    // new layer
                     layer += 1;
-                    distance = if layer == 1 { 1 } else { 2 * layer - 1 };
+                    distance = 2 * layer - 1;
                 }
             }
         }
@@ -54,9 +54,81 @@ fn part_one(input: i32) -> i32 {
         current_num += 1;
     }
 
-    println!("Coords = ({}, {})", x, y);
-
     x.abs() + y.abs()
+}
+
+use std::collections::HashMap;
+// really dumb way to do this
+#[derive(PartialEq, Eq, Hash)]
+struct Point {
+    x: i32,
+    y: i32
+}
+
+fn part_two(input: i32) -> i32 {
+    let (mut x, mut y) = (1i32, 0i32);
+    let mut layer = 0;
+    let mut current_num = 1;
+
+    let mut dir = Direction::Right;
+    let mut distance = 0;
+    
+    let mut values = HashMap::new();
+    values.insert(Point { x: 0, y: 0 }, 1);
+
+    // fill with initial instructions
+    while current_num <= input {
+        if distance == 0 {
+            match dir {
+                Direction::Up => {
+                    dir = Direction::Left;
+                    distance = 2 * layer;
+                },
+                Direction::Down => {
+                    dir = Direction::Right;
+                    distance = 2 * layer + 1;
+                },
+                Direction::Left => {
+                    dir = Direction::Down;
+                    distance = 2 * layer;
+                },
+                Direction::Right => {
+                    dir = Direction::Up;
+                    // new layer
+                    layer += 1;
+                    distance = 2 * layer - 1;
+                }
+            }
+        }
+
+        let mut value = 0;
+
+        for i in -1..2 {
+            for j in -1..2 {
+                if i == 0 && j == 0 { continue; }
+
+                let point = Point { x: x + i, y: y + j };
+                value += match values.get(&point) {
+                    Some(val) => *val,
+                    None => 0
+                }
+            }
+        }
+
+        current_num = value;
+        values.insert(Point { x, y }, current_num);
+
+        match dir {
+            Direction::Up => y += 1,
+            Direction::Down => y -= 1,
+            Direction::Left => x -= 1,
+            Direction::Right => x += 1
+        }
+
+        distance -= 1;
+    }
+
+    current_num
 }
 
 fn main() {
@@ -67,5 +139,7 @@ fn main() {
     let input: i32 = input.trim().parse().expect("Couldn't convert to i32!");
 
     let part_one_solution = part_one(input);
+    let part_two_solution = part_two(input);
     println!("Part one solution is {}", part_one_solution);
+    println!("Part two solution is {}", part_two_solution);
 }
