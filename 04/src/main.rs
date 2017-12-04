@@ -73,7 +73,6 @@ fn main() {
     let part_one_solution = part_one(input);
     let part_two_solution = part_two(input);
 
-    println!("Sort 'hello' is {}", sort_string("hello"));
     println!("Part one solution is {}", part_one_solution);
     println!("Part two solution is {}", part_two_solution);
 }
