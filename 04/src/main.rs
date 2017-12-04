@@ -15,27 +15,6 @@ fn read_file() -> String {
     contents
 }
 
-fn part_one(input: &str) -> i32 {
-    let mut num_valid = 0;
-
-    'outer: 
-    for line in input.lines() {
-        let mut set = HashSet::new();
-
-        for word in line.split_whitespace() {
-            if set.contains(word) {
-                continue 'outer;
-            }
-
-            set.insert(word);
-        }
-
-        num_valid += 1;
-    }
-
-    num_valid
-}
-
 fn sort_string(input: &str) -> String {
     let mut chars: Vec<char> = input.chars().collect();
     chars.sort_by(|a, b| a.cmp(b));
@@ -43,27 +22,32 @@ fn sort_string(input: &str) -> String {
     String::from_iter(chars)
 }
 
-fn part_two(input: &str) -> i32 {
-    let mut num_valid = 0;
-
-    'outer: 
-    for line in input.lines() {
-        let mut set = HashSet::new();
-
-        for word in line.split_whitespace() {
-            let sorted = sort_string(word);
-
-            if set.contains(&sorted) {
-                continue 'outer;
-            }
-
-            set.insert(sorted);
+fn is_valid_passphrase(line: &str, map_function: &Fn(&str) -> String) -> bool {
+    let mut set = HashSet::new();
+    for word in line.split_whitespace().map(map_function) {
+        if set.contains(&word) { 
+            return false;
         }
 
-        num_valid += 1;
+        set.insert(word);
     }
 
-    num_valid
+    true
+}
+
+fn part_one(input: &str) -> i32 {
+    // stupid way I made work for fun
+    input.lines()
+         .map(|line| is_valid_passphrase(line, &|s| s.into()))
+         .filter(|valid| *valid)
+         .count() as i32
+}
+
+fn part_two(input: &str) -> i32 {
+    input.lines()
+         .map(|line| is_valid_passphrase(line, &sort_string))
+         .filter(|valid| *valid)
+         .count() as i32
 }
 
 fn main() {
