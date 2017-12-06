@@ -25,23 +25,21 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
 
         // couldn't use built in max
         // because of tie issues
-        let mut max_idx = 0;
-        let mut max_val = i32::min_value();
+        // so calculate it "manually"
+        let (mut idx, mut num_blocks) = (0, i32::min_value());
 
         for (idx, &num) in numbers.iter().enumerate() {
-            if num > max_val {
-                max_idx = idx;
-                max_val = num;                
+            if num > num_blocks {
+                idx = idx;
+                num_blocks = num;                
             }
         }
-
-        let (mut idx, blocks) = (max_idx, max_val);
 
         // zero out max block
         numbers[idx] = 0;
 
         // redistribute
-        for _ in 0..blocks {
+        for _ in 0..num_blocks {
             idx += 1;
             if idx >= numbers.len() { idx = 0; }
 
@@ -52,7 +50,6 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
     }
 
     let first_cycle = map.get(&numbers.clone()).unwrap();
-
     (num_redists, num_redists - first_cycle)
 }
 
@@ -61,7 +58,6 @@ fn main() {
     let puzzle = puzzle.trim();
 
     let (part_one_solution, part_two_solution) = part_one_and_two(&puzzle);
-    // let part_two_solution = part_two(&puzzle);
 
     println!("Solution to part one is {}", part_one_solution);
     println!("Solution to part two is {}", part_two_solution);
