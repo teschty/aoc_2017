@@ -19,12 +19,12 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
         .map(|s| s.parse().unwrap())
         .collect();
 
+    let len = numbers.len();
     while !map.contains_key(&numbers) {
         // have to clone, don't think it should be necessary though :(
         map.insert(numbers.clone(), num_redists);
 
-        // couldn't use built in max
-        // because of tie issues
+        // couldn't use built in max, because of tie issues
         // so calculate it "manually"
         let (mut max_idx, mut num_blocks) = (0, i32::min_value());
 
@@ -35,17 +35,12 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
             }
         }
 
-        let mut idx = max_idx;
-
         // zero out max block
-        numbers[idx] = 0;
+        numbers[max_idx] = 0;
 
         // redistribute
-        for _ in 0..num_blocks {
-            idx += 1;
-            if idx >= numbers.len() { idx = 0; }
-
-            numbers[idx] += 1;
+        for i in 0..num_blocks {
+            numbers[(max_idx + i as usize + 1) % len] += 1;
         }
 
         num_redists += 1;
