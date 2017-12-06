@@ -26,14 +26,16 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
         // couldn't use built in max
         // because of tie issues
         // so calculate it "manually"
-        let (mut idx, mut num_blocks) = (0, i32::min_value());
+        let (mut max_idx, mut num_blocks) = (0, i32::min_value());
 
         for (idx, &num) in numbers.iter().enumerate() {
             if num > num_blocks {
-                idx = idx;
+                max_idx = idx;
                 num_blocks = num;                
             }
         }
+
+        let mut idx = max_idx;
 
         // zero out max block
         numbers[idx] = 0;
