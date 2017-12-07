@@ -18,13 +18,9 @@ fn to_number(byte: u8) -> i32 {
 
 fn part_one(bytes: &[u8]) -> i32 {
     let mut sum = 0i32;
-    for i in 0..bytes.len() {
-        // eh, don't like this long conditional
-        if i + 1 == bytes.len() {
-            if bytes[i] == bytes[0] {
-                sum += to_number(bytes[i]);
-            } 
-        } else if bytes[i] == bytes[i + 1] {
+    let len = bytes.len();
+    for i in 0..len {
+        if bytes[i] == bytes[(i + 1) % len] {
             sum += to_number(bytes[i]);
         }
     }
@@ -34,14 +30,11 @@ fn part_one(bytes: &[u8]) -> i32 {
 
 fn part_two(bytes: &[u8]) -> i32 {
     let mut sum = 0i32;
-
+    let len = bytes.len();
     for i in 0..bytes.len() { 
         let mut match_idx = i + bytes.len() / 2;
-        if match_idx >= bytes.len() {
-            match_idx -= bytes.len();
-        }
 
-        if bytes[i] == bytes[match_idx] {
+        if bytes[i] == bytes[match_idx % len] {
             sum += to_number(bytes[i]);
         }
     }
