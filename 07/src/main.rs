@@ -121,8 +121,6 @@ fn part_two(input: &str, base: &str) -> Option<i32> {
         // go to unbalanced parent
         cur_prog = &programs[weight_programs[key]];
     }
-
-    None
 }
 
 fn main() {
