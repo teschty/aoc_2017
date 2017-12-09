@@ -13,6 +13,7 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
     let mut total_score = 0;
     let mut group_level = 0;
     let mut in_garbage = false;
+    let mut canceled_chars = 0;
 
     let mut chars = input.chars();
     while let Some(c) = chars.next() {
@@ -20,7 +21,7 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
             match c {
                 '!' => { chars.next(); } // eat next
                 '>' => { in_garbage = false; }
-                _ => {} // do nothing
+                _ => { canceled_chars += 1; }
             }
 
             continue
@@ -38,7 +39,7 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
         }
     }
 
-    (total_score, 0)
+    (total_score, canceled_chars)
 }
 
 fn main() {
@@ -48,5 +49,4 @@ fn main() {
     let (part_one_solution, part_two_solution) = part_one_and_two(puzzle);
     println!("Solution to part one is {}", part_one_solution);
     println!("Solution to part two is {}", part_two_solution);
-
 }
