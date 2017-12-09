@@ -13,7 +13,7 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
     let mut total_score = 0;
     let mut group_level = 0;
     let mut in_garbage = false;
-    let mut canceled_chars = 0;
+    let mut non_canceled_chars = 0;
 
     let mut chars = input.chars();
     while let Some(c) = chars.next() {
@@ -21,7 +21,7 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
             match c {
                 '!' => { chars.next(); } // eat next
                 '>' => { in_garbage = false; }
-                _ => { canceled_chars += 1; }
+                _ => { non_canceled_chars += 1; }
             }
 
             continue
@@ -34,12 +34,12 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
                 group_level -= 1;
             }
             '<' => { in_garbage = true }
-            ',' => {}
-            _ => { println!("{}", c); unreachable!() } // not in garbage, shouldn't be able to get here
+            ',' => {} // don't actually do anything for commas
+            _ => { unreachable!() } // not in garbage, shouldn't be able to get here
         }
     }
 
-    (total_score, canceled_chars)
+    (total_score, non_canceled_chars)
 }
 
 fn main() {
