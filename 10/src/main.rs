@@ -1,3 +1,5 @@
+#![feature(inclusive_range_syntax)] 
+
 use std::fs::File;
 use std::io::Read;
 
@@ -17,12 +19,7 @@ fn part_one(input: &str) -> i32 {
         .map(|s| s.parse().unwrap())
         .collect();
 
-    let mut list = [0u8; LIST_SIZE];
-
-    // initialize with 0..LIST_SIZE
-    for i in 0..LIST_SIZE {
-        list[i] = i as u8;
-    }
+    let mut list: Vec<u8> = (0..=255).collect();
 
     let mut current_pos = 0;
     let mut skip_size = 0;
@@ -51,11 +48,7 @@ fn part_two(input: &str) -> String {
     // add these values for some reason 
     lengths.extend(&[17, 31, 73, 47, 23]);
 
-    let mut list = [0u8; LIST_SIZE];
-    // initialize with 0..LIST_SIZE
-    for i in 0..LIST_SIZE {
-        list[i] = i as u8;
-    }
+    let mut list: Vec<u8> = (0..=255).collect();
 
     let mut current_pos = 0;
     let mut skip_size = 0;
@@ -74,23 +67,12 @@ fn part_two(input: &str) -> String {
         }
     }
 
-    // make dense hash
-    let mut dense_hash = [0u8; LIST_SIZE / 16];
-    for i in 0..dense_hash.len() {
-        let mut value = 0;
-        for j in 0..16 {
-            value ^= list[i * 16 + j];
-        }
-
-        dense_hash[i] = value;
-    }
-
-    let mut hash_string = String::new();
-    for byte in &dense_hash {
-        hash_string.push_str(&format!("{:x}", byte));
-    }
-
-    hash_string
+    let dense_hash: Vec<String> = list.chunks(16)
+        .map(|chunk| chunk.iter().fold(0, |acc, &val| acc ^ val as u8))
+        .map(|val| format!("{:x}", val))
+        .collect();
+    
+    dense_hash.join("")
 }
 
 fn main() {
