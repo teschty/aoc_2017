@@ -36,7 +36,7 @@ fn part_one(input: &str) -> i32 {
         skip_size += 1;
     }
 
-    list[0] as i32 * list[1] as i32
+    i32::from(list[0]) * i32::from(list[1])
 }
 
 fn part_two(input: &str) -> String {
