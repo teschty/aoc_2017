@@ -60,8 +60,8 @@ fn main() {
     let puzzle = read_file();
     let puzzle = puzzle.trim();
 
-    let part_one_solution = part_one(&puzzle);
-    let part_two_solution = part_two(&puzzle);
+    let part_one_solution = part_one(puzzle);
+    let part_two_solution = part_two(puzzle);
 
     println!("Solution to part one is {}", part_one_solution);
     println!("Solution to part two is {}", part_two_solution);

@@ -13,7 +13,7 @@ fn read_file() -> String {
 
 // convert ascii number to it's actual value
 fn to_number(byte: u8) -> i32 {
-    (byte as i32) - ('0' as i32)
+    i32::from(byte) - ('0' as i32)
 }
 
 fn part_one(bytes: &[u8]) -> i32 {
@@ -50,8 +50,8 @@ fn main() {
     // since these are just all ASCII numbers (0-9)
     // we can just convert this to byte array
     let bytes = puzzle.as_bytes();
-    let part_one_solution = part_one(&bytes);
-    let part_two_solution = part_two(&bytes);
+    let part_one_solution = part_one(bytes);
+    let part_two_solution = part_two(bytes);
 
     println!("Part one solution is {}", part_one_solution);
     println!("Part two solution is {}", part_two_solution);

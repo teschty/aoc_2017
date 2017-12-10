@@ -46,7 +46,7 @@ fn part_one_and_two(input: &str) -> (i32, i32) {
         num_redists += 1;
     }
 
-    let first_cycle = map.get(&numbers.clone()).unwrap();
+    let first_cycle = &map[&numbers.clone()];
     (num_redists, num_redists - first_cycle)
 }
 
@@ -54,7 +54,7 @@ fn main() {
     let puzzle = read_file();
     let puzzle = puzzle.trim();
 
-    let (part_one_solution, part_two_solution) = part_one_and_two(&puzzle);
+    let (part_one_solution, part_two_solution) = part_one_and_two(puzzle);
 
     println!("Solution to part one is {}", part_one_solution);
     println!("Solution to part two is {}", part_two_solution);
