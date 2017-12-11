@@ -9,10 +9,28 @@ fn read_file() -> String {
     contents
 }
 
-fn part_one(input: &str) -> i32 {
+fn distance(x: i32, y: i32) -> i32 {
+    if x == 0 {
+        y.abs()
+    } else if y == 0 {
+        x.abs()
+    } else {
+        let dx = x.abs();
+        let dy = y.abs();
+
+        if y >= 0 {
+            dx + dy - ((dx as f32 / 2.0).ceil() as i32)
+        } else {
+            dx + dy -  ((dx as f32 / 2.0).floor() as i32)
+        }
+    }
+}
+
+fn part_one_and_two(input: &str) -> (i32, i32) {
     let instructions: Vec<&str> = input.split(',').collect();
 
     let (mut x, mut y) = (0i32, 0i32);
+    let mut max_distance = 0;
 
     for instruction in instructions {
         let even = x % 2 == 0;
@@ -37,27 +55,19 @@ fn part_one(input: &str) -> i32 {
             }
             _ => panic!("Unknown direction {}", instruction)
         }
+
+        max_distance = max_distance.max(distance(x, y));
     }
 
-    if x == 0 {
-        y.abs()
-    } else if y == 0 {
-        x.abs()
-    } else {
-        let dx = x.abs();
-        let dy = y.abs();
-
-        if y >= 0 {
-            dx + dy - ((dx as f32 / 2.0).ceil() as i32)
-        } else {
-            dx + dy -  ((dx as f32 / 2.0).floor() as i32)
-        }
-    }
+    (distance(x, y), max_distance)
 }
 
 fn main() {
     let puzzle = read_file();
     let puzzle = puzzle.trim();
 
-    println!("Solution to part one is {}", part_one(puzzle));
+    let (part_one_solution, part_two_solution) = part_one_and_two(puzzle);
+
+    println!("Solution to part one is {}", part_one_solution);
+    println!("Solution to part two is {}", part_two_solution);
 }
