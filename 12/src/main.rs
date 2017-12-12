@@ -19,7 +19,7 @@ fn part_one(input: &str) -> i32 {
         let adjacent: Vec<usize> = adjacent_list
             .trim()
             .split(", ")
-            .map(|s| s.parse().unwrap())
+            .filter_map(|s| s.parse().ok())
             .collect(); 
         
         list.push(adjacent);
@@ -56,7 +56,7 @@ fn part_two(input: &str) -> i32 {
         let adjacent: Vec<usize> = adjacent_list
             .trim()
             .split(", ")
-            .map(|s| s.parse().unwrap())
+            .filter_map(|s| s.parse().ok())
             .collect(); 
         
         list.push(adjacent);
