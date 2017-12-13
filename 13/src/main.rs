@@ -26,9 +26,7 @@ fn get_layers(input: &str) -> Vec<(i32, i32)> {
 }
 
 fn part_one(input: &str) -> i32 {
-    let layers = get_layers(input);
-
-    layers.iter()
+    get_layers(input).iter()
         .filter(|&&(depth, range)| depth % (range * 2 - 2) == 0)
         .fold(0, |acc, &(depth, range)| acc + (depth * range))
 }
