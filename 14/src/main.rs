@@ -52,7 +52,7 @@ fn part_one(input: &str) -> u32 {
     }).sum()
 }
 
-fn dfs_visit(x: i32, y: i32, grid: &Vec<Vec<char>>, visited: &mut HashSet<(usize, usize)>) {
+fn dfs_visit(x: i32, y: i32, grid: &[Vec<char>], visited: &mut HashSet<(usize, usize)>) {
     if x < 0 || y < 0 || x > 127 || y > 127 { return }
     let (x, y) = (x as usize, y as usize);
     if visited.contains(&(x, y)) { return }
