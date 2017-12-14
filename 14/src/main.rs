@@ -1,6 +1,7 @@
 #![feature(inclusive_range_syntax)] 
 use std::fs::File;
 use std::io::Read;
+use std::collections::HashSet;
 
 const LIST_SIZE: usize = 256;
 
@@ -51,9 +52,54 @@ fn part_one(input: &str) -> u32 {
     }).sum()
 }
 
+fn dfs_visit(x: i32, y: i32, grid: &Vec<Vec<char>>, visited: &mut HashSet<(usize, usize)>) {
+    if x < 0 || y < 0 || x > 127 || y > 127 { return }
+    let (x, y) = (x as usize, y as usize);
+    if visited.contains(&(x, y)) { return }
+
+    if grid[x][y] == '1' {
+        visited.insert((x, y));
+
+        // convert back to prevent underflow
+        let (x, y) = (x as i32, y as i32);
+        dfs_visit(x - 1, y, grid, visited);
+        dfs_visit(x + 1, y, grid, visited);
+        dfs_visit(x, y - 1, grid, visited);
+        dfs_visit(x, y + 1, grid, visited);
+    }
+}
+
+// this one won't be as easy...
+fn part_two(input: &str) -> u32 {
+    // convert to 2d 'array' of '0's and '1's
+    let grid: Vec<Vec<char>> = (0..128).map(|i| {
+        let hash_bytes = get_hash(&format!("{}-{}", input, i));
+        let bit_string: String = hash_bytes.iter().map(|b| format!("{:08b}", b)).collect();
+        bit_string.chars().collect()
+    }).collect();
+
+    let mut regions = 0;
+    let mut visited: HashSet<(usize, usize)> = HashSet::new();
+    for y in 0..128 {
+        for x in 0..128 {
+            if grid[x][y] != '1' {
+                continue;
+            }
+
+            if !visited.contains(&(x, y)) {
+                regions += 1;
+                dfs_visit(x as i32, y as i32, &grid, &mut visited);
+            }
+        }
+    }
+
+    regions
+}
+
 fn main() {
     let puzzle = read_file();
     let puzzle = puzzle.trim();
 
     println!("Solution to part one is {}", part_one(puzzle));
+    println!("Solution to part two is {}", part_two(puzzle));
 }
