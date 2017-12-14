@@ -3,8 +3,6 @@ use std::fs::File;
 use std::io::Read;
 use std::collections::HashSet;
 
-const LIST_SIZE: usize = 256;
-
 fn read_file() -> String {
     let mut contents = String::new();
     let mut f = File::open("puzzle.txt").expect("puzzle.txt couldn't be found :(");
@@ -29,8 +27,8 @@ fn get_hash(input: &str) -> Vec<u8> {
     for _ in 0..64 {
         for length in &lengths {
             for i in 0..(length / 2) {
-                let start_idx = (current_pos + i) % LIST_SIZE;
-                let end_idx = (current_pos + (length - 1) - i) % LIST_SIZE;
+                let start_idx = (current_pos + i) % 256;
+                let end_idx = (current_pos + (length - 1) - i) % 256;
 
                 list.swap(start_idx, end_idx);
             }
@@ -82,11 +80,7 @@ fn part_two(input: &str) -> u32 {
     let mut visited: HashSet<(usize, usize)> = HashSet::new();
     for y in 0..128 {
         for x in 0..128 {
-            if grid[x][y] != '1' {
-                continue;
-            }
-
-            if !visited.contains(&(x, y)) {
+            if grid[x][y] == '1' && !visited.contains(&(x, y)) {
                 regions += 1;
                 dfs_visit(x as i32, y as i32, &grid, &mut visited);
             }
