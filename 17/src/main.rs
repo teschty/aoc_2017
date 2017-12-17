@@ -24,9 +24,24 @@ fn part_one(input: usize) -> usize {
     buffer[(cur_pos + 1) % buffer.len()]
 }
 
+fn part_two(input: usize) -> usize {
+    let mut pos = 0;
+    let mut final_val = 0;
+
+    for i in 1..50000001 {
+        pos = (pos + input) % i + 1;
+        if pos == 1 {
+            final_val = i;
+        }
+    }
+
+    final_val
+}
+
 fn main() {
     let puzzle = read_file();
     let puzzle: usize = puzzle.trim().parse().unwrap();
 
     println!("Solution to part one is {}", part_one(puzzle));
+    println!("Solution to part two is {}", part_two(puzzle));
 }
