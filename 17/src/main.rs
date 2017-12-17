@@ -12,7 +12,7 @@ fn read_file() -> String {
 fn part_one(input: usize) -> usize {
     // only 2017 additions,
     // vector will be fine
-    let mut buffer = vec![0; 2017];
+    let mut buffer = vec![0];
     let mut cur_pos = 0;
 
     for i in 1..2018 {
