@@ -19,10 +19,10 @@ fn is_pipe(c: char) -> bool {
 }
 
 fn find_new_dir(path: &Vec<Vec<char>>, x: usize, y: usize, prev_dir: Direction) -> Direction {
-    let mut top = y > 0 && is_pipe(path[y - 1][x]) && prev_dir != Direction::Down;
-    let mut left = x > 0 && is_pipe(path[y][x - 1]) && prev_dir != Direction::Right;
-    let mut bottom = y < path.len() && is_pipe(path[y + 1][x]) && prev_dir != Direction::Up;
-    let mut right = x < path[0].len() && is_pipe(path[y][x + 1]) && prev_dir != Direction::Left;
+    let top = y > 0 && is_pipe(path[y - 1][x]) && prev_dir != Direction::Down;
+    let left = x > 0 && is_pipe(path[y][x - 1]) && prev_dir != Direction::Right;
+    let bottom = y < path.len() && is_pipe(path[y + 1][x]) && prev_dir != Direction::Up;
+    let right = x < path[0].len() && is_pipe(path[y][x + 1]) && prev_dir != Direction::Left;
 
     if top {
         Direction::Up
@@ -37,7 +37,7 @@ fn find_new_dir(path: &Vec<Vec<char>>, x: usize, y: usize, prev_dir: Direction) 
     }
 }
 
-fn part_one(input: &str) -> String {
+fn part_one_and_two(input: &str) -> (String, i32) {
     let mut result = String::new();
 
     let input: Vec<Vec<char>> = input
@@ -48,23 +48,18 @@ fn part_one(input: &str) -> String {
     let start = input[0].iter().position(|&c| c == '|').unwrap();
     let mut dir = Direction::Down;
 
-    let (mut x, mut y) = (start, 0);
+    let (mut x, mut y, mut steps) = (start, 0, 0);
     while x >= 0 && x < input[0].len() && y >= 0 && y < input.len() {
-        println!("({}, {})", x, y);
         // change direction
         match input[y][x] {
             // new direction
-            '+' => {
-                let new_dir = find_new_dir(&input, x, y, dir);
-                println!("New direction = {:?}", new_dir);
-                dir = new_dir;
-            }
+            '+' => dir = find_new_dir(&input, x, y, dir),
 
             '|' | '-' => {},
 
             c if c.is_alphabetic() => result.push(c),
 
-            _ | ' ' => break
+            _ => break
         }
 
         match dir {
@@ -73,12 +68,16 @@ fn part_one(input: &str) -> String {
             Direction::Left => x -= 1,
             Direction::Right => x += 1
         }
+        
+        steps += 1;
     }
 
-    result
+    (result, steps)
 }
 
 fn main() {
     let puzzle = read_file();
-    println!("Solution to part one is {}", part_one(&puzzle));
+    let (part_one_solution, part_two_solution) = part_one_and_two(&puzzle);
+    println!("Solution to part one is {}", part_one_solution);
+    println!("Solution to part two is {}", part_two_solution);
 }
